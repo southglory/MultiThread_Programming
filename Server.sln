@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{849D72CA-0E13-4526-BA1F-994DC2415792}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerCore", "ServerCore\ServerCore.csproj", "{A04C6726-6CFA-4A0E-A566-224982A6CBCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyClient", "DummyClient\DummyClient.csproj", "{351CA664-7DEF-408F-B598-97BAC5F837FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{849D72CA-0E13-4526-BA1F-994DC2415792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{849D72CA-0E13-4526-BA1F-994DC2415792}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{849D72CA-0E13-4526-BA1F-994DC2415792}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{849D72CA-0E13-4526-BA1F-994DC2415792}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A04C6726-6CFA-4A0E-A566-224982A6CBCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A04C6726-6CFA-4A0E-A566-224982A6CBCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A04C6726-6CFA-4A0E-A566-224982A6CBCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A04C6726-6CFA-4A0E-A566-224982A6CBCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{351CA664-7DEF-408F-B598-97BAC5F837FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{351CA664-7DEF-408F-B598-97BAC5F837FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{351CA664-7DEF-408F-B598-97BAC5F837FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{351CA664-7DEF-408F-B598-97BAC5F837FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {72F0F826-EB24-4B11-BE5B-BC23AAB71A18}
+	EndGlobalSection
+EndGlobal
