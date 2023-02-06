@@ -5,40 +5,28 @@ using System.Threading.Tasks;
 
 namespace ServerCore
 {
-
-    internal class Program
+    // 전역(static공간)에 있는 [ JobQueue ] 에 락을 걸어서 접근한 다음 한번에 최대한 많은 일감을 빼오면, 락을 하는 횟수를 줄일 수 있다.
+    class Program
     {
-        static volatile int count = 0;
-        static Lock _lock = new Lock();
+        // TLS공간 사용하기: ThreadLocal
+        static ThreadLocal<string> ThreadName = new ThreadLocal<string>(() => { return $"My Name is {Thread.CurrentThread.ManagedThreadId}"; });
+
+        static void WhoAmI()
+        {
+            bool repeat = ThreadName.IsValueCreated;
+            if (repeat)
+                Console.WriteLine(ThreadName.Value + "(repeat)");
+            else
+                Console.WriteLine(ThreadName.Value);
+        }
 
         static void Main(string[] args)
         {
-            Task t1 = new Task(delegate ()
-            {
-                for (int i = 0; i < 100000; i++)
-                {
-                    _lock.WriteLock();
-                    count++;
-                    _lock.WriteUnlock();
-                }
-            });
+            ThreadPool.SetMinThreads(1, 1);
+            ThreadPool.SetMaxThreads(3, 3);
+            Parallel.Invoke(WhoAmI, WhoAmI, WhoAmI, WhoAmI, WhoAmI, WhoAmI, WhoAmI, WhoAmI);
 
-            Task t2 = new Task(delegate ()
-            {
-                for (int i = 0; i < 100000; i++)
-                {
-                    _lock.WriteLock();
-                    count--;
-                    _lock.WriteUnlock();
-                }
-            });
-
-            t1.Start();
-            t2.Start();
-
-            Task.WaitAll(t1, t2);
-
-            Console.WriteLine(count);
+            ThreadName.Dispose();
         }
     }
 }
