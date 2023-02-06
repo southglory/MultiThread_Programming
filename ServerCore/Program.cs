@@ -1,32 +1,59 @@
 ﻿using System;
 using System.Data;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ServerCore
 {
-    // 전역(static공간)에 있는 [ JobQueue ] 에 락을 걸어서 접근한 다음 한번에 최대한 많은 일감을 빼오면, 락을 하는 횟수를 줄일 수 있다.
+   
     class Program
     {
-        // TLS공간 사용하기: ThreadLocal
-        static ThreadLocal<string> ThreadName = new ThreadLocal<string>(() => { return $"My Name is {Thread.CurrentThread.ManagedThreadId}"; });
+        static Listener _listener = new Listener();
 
-        static void WhoAmI()
+        static void OnAcceptHandler(Socket clientSocket)
         {
-            bool repeat = ThreadName.IsValueCreated;
-            if (repeat)
-                Console.WriteLine(ThreadName.Value + "(repeat)");
-            else
-                Console.WriteLine(ThreadName.Value);
-        }
+            try
+            {
+                // 받는다
+                byte[] recvBuff = new byte[1024];
+                int recvBytes = clientSocket.Receive(recvBuff);//데이터는 recvBuff에 넣어주고, 몇 바이트를 받았는지는 recvBytes에 넣어준다.
+                string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes); //시작인덱스0
+                Console.WriteLine($"[From Client] {recvData}");
 
+                // 보낸다
+                byte[] sendBuff = Encoding.UTF8.GetBytes("Welcome to MMORPG server !");
+                clientSocket.Send(sendBuff); //보내려는데 안 받으면 계속 대기한다.
+
+                // 쫒아낸다
+                clientSocket.Shutdown(SocketShutdown.Both);
+                clientSocket.Close();
+            }
+            catch(Exception e) 
+            {
+                Console.WriteLine(e);
+            }
+            
+        }
         static void Main(string[] args)
         {
-            ThreadPool.SetMinThreads(1, 1);
-            ThreadPool.SetMaxThreads(3, 3);
-            Parallel.Invoke(WhoAmI, WhoAmI, WhoAmI, WhoAmI, WhoAmI, WhoAmI, WhoAmI, WhoAmI);
+            // DNS (Domain Name System)
+            // www.rookiss.com => 123.123.123.12
+            string host = Dns.GetHostName();
+            IPHostEntry ipHost = Dns.GetHostEntry(host);
+            IPAddress ipAddr = ipHost.AddressList[0];
+            IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
-            ThreadName.Dispose();
+
+            _listener.Init(endPoint, OnAcceptHandler);
+            Console.WriteLine("Listening...");
+
+            while (true)
+            {
+                ;
+            }
         }
     }
 }
