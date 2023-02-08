@@ -50,23 +50,23 @@ namespace ServerCore
                         _writeCount = 1;
                         return;
                     }
-                    
+
                 }
                 Thread.Yield();
             }
-        
+
         }
 
         public void WriteUnlock()
         {
             // 잠근만큼 풀어주도록 짝이 맞을 때에만 완전히 나감.
-            int lockCount = --_writeCount; 
+            int lockCount = --_writeCount;
             if (lockCount == 0)
                 // 나갈때는 전부다 EMPTY_FLAG, 즉 0으로 초기화해줌.
                 Interlocked.Exchange(ref _flag, EMPTY_FLAG);
         }
 
-        public void ReadLock() 
+        public void ReadLock()
         {
             // 특수한 경우. 동일 쓰레드가 WriteLock을 이미 획득하고 있는지 확인
             int lockThreadId = (_flag & WRITE_MASK) >> 16; // 0x00007FFF
@@ -94,7 +94,7 @@ namespace ServerCore
 
                 Thread.Yield();
             }
-        }  
+        }
 
         public void ReadUnlock()
         {

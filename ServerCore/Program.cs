@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Data;
 using System.Net;
 using System.Net.Sockets;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ServerCore
 {
-   
+
     class Program
     {
         static Listener _listener = new Listener();
@@ -17,25 +18,23 @@ namespace ServerCore
         {
             try
             {
-                // 받는다
-                byte[] recvBuff = new byte[1024];
-                int recvBytes = clientSocket.Receive(recvBuff);//데이터는 recvBuff에 넣어주고, 몇 바이트를 받았는지는 recvBytes에 넣어준다.
-                string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes); //시작인덱스0
-                Console.WriteLine($"[From Client] {recvData}");
 
-                // 보낸다
+                Session session = new Session();
+                session.Start(clientSocket);
+
                 byte[] sendBuff = Encoding.UTF8.GetBytes("Welcome to MMORPG server !");
-                clientSocket.Send(sendBuff); //보내려는데 안 받으면 계속 대기한다.
+                session.Send(sendBuff);
 
-                // 쫒아낸다
-                clientSocket.Shutdown(SocketShutdown.Both);
-                clientSocket.Close();
+                Thread.Sleep(1000);
+
+                session.Disconnect();
+                session.Disconnect();
             }
-            catch(Exception e) 
+            catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-            
+
         }
         static void Main(string[] args)
         {

@@ -26,9 +26,12 @@ namespace ServerCore
             // backing : 최대 대기수
             _listenSocket.Listen(10);
 
-            SocketAsyncEventArgs args = new SocketAsyncEventArgs();
-            args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted);
-            RegisterAccept(args);//낚시대를 던진다.
+            for (int i = 0; i < 10; i++) // 동접자가 많으면 이렇게 늘려도 된다.
+            {
+                SocketAsyncEventArgs args = new SocketAsyncEventArgs();
+                args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted);
+                RegisterAccept(args);//낚시대를 던진다.
+            }
         }
 
         void RegisterAccept(SocketAsyncEventArgs args)//예약
@@ -39,6 +42,7 @@ namespace ServerCore
             if (pending == false)//던지자마자 잡혀서 올렸다.
                 OnAcceptCompleted(null, args);
         }
+
 
         void OnAcceptCompleted(object sender, SocketAsyncEventArgs args)
         {
