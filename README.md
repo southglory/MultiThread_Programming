@@ -4,3 +4,4 @@
 [20230207] Onblocking, 즉 Async비동기 방식 연습  
 [20230208] Session작성, Receive를 비동기로.  
 [20230208] Session작성, send를 비동기로.  
+[20230209] Recv Arg 수정, _pendingList 생성.  
