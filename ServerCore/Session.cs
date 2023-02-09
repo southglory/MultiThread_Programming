@@ -17,7 +17,7 @@ namespace ServerCore
         RecvBuffer _recvBuffer = new RecvBuffer(1024);
 
         object _lock = new object();
-        Queue<byte[]> _sendQueue= new Queue<byte[]>();
+        Queue<ArraySegment<byte>> _sendQueue= new Queue<ArraySegment<byte>>();
         List < ArraySegment<byte>> _pendingList = new List < ArraySegment<byte>>();
         SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
         SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
@@ -36,7 +36,7 @@ namespace ServerCore
             RegisterRecv();            
         }
 
-        public void Send(byte[] sendBuff)
+        public void Send(ArraySegment<byte> sendBuff)
         {
             lock (_lock)
             {
@@ -64,8 +64,8 @@ namespace ServerCore
 
             while (_sendQueue.Count > 0)
             {
-                byte[] buff = _sendQueue.Dequeue();
-                _pendingList.Add(new ArraySegment<byte>(buff, 0, buff.Length)); //struct구조체이고 클래스가 아니므로 heap이 아니라 stack에 할당됨.
+                ArraySegment<byte> buff = _sendQueue.Dequeue();
+                _pendingList.Add(buff); //struct구조체이고 클래스가 아니므로 heap이 아니라 stack에 할당됨.
             }
             _sendArgs.BufferList = _pendingList;
 
