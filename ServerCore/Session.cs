@@ -3,11 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ServerCore
 {
+    public abstract class PacketSession : Session
+    {
+        public static readonly int HeaderSize = 2;
+
+        // [size(2)][packetId(2)][ ... ][size(2)][pakcetId(2)][ ... ]
+        public sealed override int OnRecv(ArraySegment<byte> buffer) // sealed 키워드는 혹시 다른 클래스가 PacketSession을 상속받아도 OnRecv함수를 override할수 없게끔 봉인.
+        {
+            int processLen = 0;
+
+            while (true)
+            {
+                // 최소한 헤더는 파싱할 수 있는지 확인
+                if (buffer.Count < HeaderSize)
+                    break;
+
+                // 패킷이 완전체로 도착했는지 확인
+                ushort dataSize = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+                if (buffer.Count < dataSize)//부분적으로만 왔으면
+                    break;
+
+                // 여기까지 왔으면 패킷 조립 가능
+                OnRecvPacket(new ArraySegment<byte>(buffer.Array, buffer.Offset, dataSize));//new ArraySegment<byte>()는 buffer.Slice()와 같지만 가독성이 더 좋아서 Slice대신 씀. 그리고, ArraySegment는 클래스가 아니라 구조체(struct)이므로 new로 생성하더라도 heap영역을 잡아먹는게 아니라 stack에 복사되는 것일 뿐이다. 그래서 부담 없이 만들 수 있다.
+
+                processLen += dataSize;
+                buffer = new ArraySegment<byte>(buffer.Array, buffer.Offset + dataSize, buffer.Count - dataSize);
+            }
+
+            return processLen;
+        }
+
+        public abstract void OnRecvPacket(ArraySegment<byte> buffer);
+
+    }
 
     public abstract class Session
     {
