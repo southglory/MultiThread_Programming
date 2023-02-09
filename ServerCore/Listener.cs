@@ -11,13 +11,13 @@ namespace ServerCore
     class Listener
     {
         Socket _listenSocket;
-        Action<Socket> _onAcceptHandler;
+        Func<Session> _sessionFactory;//세션을 어떤 방식으로 누구를 만들지 정의하는 함수.
 
 
-        public void Init(IPEndPoint endPoint, Action<Socket> onAcceptHandler)
+        public void Init(IPEndPoint endPoint, Func<Session> sessionFactory)
         {
             _listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            _onAcceptHandler += onAcceptHandler;
+            _sessionFactory += sessionFactory;
 
             // 문지기 교육. 정문이 여기다.
             _listenSocket.Bind(endPoint);
@@ -49,7 +49,9 @@ namespace ServerCore
             if (args.SocketError == SocketError.Success)
             {
                 //TODO
-                _onAcceptHandler.Invoke(args.AcceptSocket);
+                Session session = _sessionFactory.Invoke();
+                session.Start(args.AcceptSocket);
+                session.OnConnected(args.AcceptSocket.RemoteEndPoint);
             }
             else
                 Console.WriteLine(args.SocketError.ToString());
