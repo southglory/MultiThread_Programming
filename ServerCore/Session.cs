@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ServerCore
 {
 
-    internal abstract class Session
+    public abstract class Session
     {
         Socket _socket;
         int _disconnected = 0; // 끊겼는지 여부를 관리.
