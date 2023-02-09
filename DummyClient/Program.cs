@@ -22,14 +22,16 @@ namespace DummyClient
         public override void OnDisconnected(EndPoint endPoint)
         {
             Console.WriteLine($"OnDisconnected: {endPoint}");
-
         }
 
-        public override void OnRecv(ArraySegment<byte> buffer)
+        // 이동 패킷 ((3,2) 좌표로 이동하고 싶다!)
+        // 문자열 말고 정해진 규약. 프로토콜 대로 보내도록 바꾸자.
+        // 패킷번호, 좌표: 15 3 2
+        public override int OnRecv(ArraySegment<byte> buffer)
         {
             string recvData = Encoding.UTF8.GetString(buffer.Array, buffer.Offset, buffer.Count);
             Console.WriteLine($"[From Server] {recvData}");
-
+            return buffer.Count;
         }
 
         public override void OnSend(int numOfBytes)
