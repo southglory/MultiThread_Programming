@@ -12,9 +12,7 @@ namespace PacketGenerator
         // {1} 멤버 변수들
         // {2} 멤버 변수 Read
         // {3} 멤버 변수 Write
-        // 
         public static string packetFormat =
-
 @"
 
 class {0}
@@ -57,7 +55,7 @@ class {0}
         // {0} 변수 형식
         // {1} 변수 이름
         public static string memberFormat =
-@"public {0} {1}";
+@"public {0} {1};";
 
         // {0} 변수 이름
         // {1} To~ 변수 형식
@@ -71,8 +69,8 @@ count += sizeof({2});";
 @"ushort {0]Len = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
 count += sizeof(ushort);
 this.{0} = Encoding.Unicode.GetString(s.Slice(count, {0}Len));
-count += {0}Len;
-";
+count += {0}Len;";
+
         // {0} 변수 이름
         // {1} 변수 형식
 
@@ -86,7 +84,6 @@ count += sizeof({1});";
 @"ushort {0}Len = (ushort)Encoding.Unicode.GetBytes(this.{0}, 0, this.{0}.Length, segment.Array, segment.Offset + count + sizeof(ushort));
 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), {0}Len);
 count += sizeof(ushort);
-count += {0}Len;
-";
+count += {0}Len;";
     }
 }

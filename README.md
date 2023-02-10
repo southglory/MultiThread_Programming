@@ -17,7 +17,8 @@ Server-Program-Session: knight class 추가. ServerCore-Session-Send인풋인자
 [20230210_1] [Serialization] DummyClient: ServerSession(Class)추가. 기존 Programs(Class)내 패킷통신 부분을 이동함. Server: ClientSession(Class)추가. 기존 Programs(Class)내 패킷통신 부분을 이동함.  
 [20230210_2] [Serialization] DummyClient-ServerSession: BitConverter.GetBytes+Array.Copy대신에 BitConverter.TryWriteBytes사용함. success여부를 리턴값으로 알 수 있고 빠름.
 [20230210_3] [Serialization] Serialization의 packet write, read함수화. 패킷 변조 방지용 ReadOnlySpan<byte>함수.  
-[20230210_4] [Serialization] string 가변적인 정보를 위한 작업. sizeof(ushort). span.Slice(). Encoding.Unicode.GetByteCount(), GetBytes(), GetString()  
+[20230210_4] [Serialization] string 가변적인 정보를 위한 작업. sizeof(ushort). span.Slice(). Encoding.Unicode.GetByteCount(), GetBytes(), GetString().  
 [20230210_5] [Serialization] Instance buffer를 만들어서 거기에 add를 해서 패킷을 보냈음. flatbuffer를 이용하면 데이터를 배열에 바로 넣도록 하지만, 우리의 방법은 중간의 Instance를 만들어서 거기에 넣는 방법임. 코딩과 관리에 편함.  
-[20230210_6] [Packet Generator] 자동화.   Tools폴더 내에 PacketGenerator 프로젝트를 생성. PDL.xml 새항목 추가.(Packet Definition List라고 하자.). Program에 ParsePacket(XmlReader r), ParseMembers(XmlReader r) 작성. PacketFormat새항목 추가, 작성중.
-[20230210_7] [Packet Generator] 함수 템플릿화, 변수 이름 자동화 중.
+[20230210_6] [Packet Generator] 자동화.   Tools폴더 내에 PacketGenerator 프로젝트를 생성. PDL.xml 새항목 추가.(Packet Definition List라고 하자.). Program에 ParsePacket(XmlReader r), ParseMembers(XmlReader r) 작성. PacketFormat새항목 추가, 작성중.  
+[20230210_7] [Packet Generator] ServerSession Read Write 함수 템플릿화, 변수 이름 자동화 중. at PacketFormat.cs
+[20230210_8] [Packet Generator] PacketGenerator - Program: File.WriteAllText(genPackets)로 파싱한 내용을 추가함. 지금 에러상태임. GenPackets.cs가 자동생성 안됨.
