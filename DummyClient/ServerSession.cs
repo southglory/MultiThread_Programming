@@ -8,21 +8,60 @@ using System.Threading.Tasks;
 
 namespace DummyClient
 {
-    class Packet
+    public abstract class Packet
     {
         public ushort size; //ushort는 0 ~ 65,535, 2byte = 64KByte 까지.
         public ushort packetId;
+
+        public abstract ArraySegment<byte> Write();
+        public abstract void Read(ArraySegment<byte> s);
     }
 
     class PlayerInfoReq : Packet
     {
         public long playerId;
-    }
 
-    class PlayerInfoOk : Packet
-    {
-        public int hp;
-        public int attack;
+        public PlayerInfoReq()
+        {
+            this.packetId = (ushort)PacketID.PlayerInfoReq;
+        }
+
+        public override void Read(ArraySegment<byte> s)
+        {
+            //역직렬화
+            ushort count = 0;
+
+            //ushort size = BitConverter.ToUInt16(s.Array, s.Offset);
+            count += 2;
+            //ushort id = BitConverter.ToUInt16(s.Array, s.Offset + count);
+            count += 2;
+
+            this.playerId = BitConverter.ToInt64(new ReadOnlySpan<byte>(s.Array, s.Offset + count, s.Count - count)); // count만 변조하는 악의적인 공격을 감지하기 위해서 누적count보다 header리턴하는 count가 작으면 에러가 나도록 수정함.
+            count += 8;
+        }
+
+        public override ArraySegment<byte> Write()
+        {
+            ArraySegment<byte> s = SendBufferHelper.Open(4096); // 한번에 큰 덩어리. new byte[4096];  
+
+            //직렬화
+            ushort count = 0;
+            bool success = true;
+
+            //success &= BitConverter.TryWriteBytes(new Span<byte>(s.Array, s.Offset, s.Count), packet.size);
+            count += 2;
+            success &= BitConverter.TryWriteBytes(new Span<byte>(s.Array, s.Offset + count, s.Count - count), this.packetId);
+            count += 2;
+            success &= BitConverter.TryWriteBytes(new Span<byte>(s.Array, s.Offset + count, s.Count - count), this.playerId);
+            count += 8;
+            success &= BitConverter.TryWriteBytes(new Span<byte>(s.Array, s.Offset, s.Count), count); // 보내려는 최종 사이즈는 누적된 count.
+
+            if (success == false)
+                return null;
+
+            return SendBufferHelper.Close(count);
+
+        }
     }
 
     public enum PacketID
@@ -37,28 +76,14 @@ namespace DummyClient
         {
             Console.WriteLine($"OnConnected: {endPoint}");
 
-            PlayerInfoReq packet = new PlayerInfoReq() { packetId = (ushort)PacketID.PlayerInfoReq };//보내려는 최종 size는 미리 알수 없으므로 지웠음.
+            PlayerInfoReq packet = new PlayerInfoReq() { playerId = 1001 };//보내려는 최종 size는 미리 알수 없으므로 지웠음.
 
             // 보낸다(손님이 먼저 보냄)
             //for (int i = 0; i < 5; i++)
             {
-                ArraySegment<byte> s = SendBufferHelper.Open(4096); // 한번에 큰 덩어리. new byte[4096];  
-
-                ushort count = 0;
-                bool success = true;
-
-                //success &= BitConverter.TryWriteBytes(new Span<byte>(s.Array, s.Offset, s.Count), packet.size);
-                count += 2;
-                success &= BitConverter.TryWriteBytes(new Span<byte>(s.Array, s.Offset+count, s.Count-count), packet.packetId);
-                count += 2;
-                success &= BitConverter.TryWriteBytes(new Span<byte>(s.Array, s.Offset+count, s.Count-count), packet.playerId);
-                count += 8;
-                success &= BitConverter.TryWriteBytes(new Span<byte>(s.Array, s.Offset, s.Count), count); // 보내려는 최종 사이즈는 누적된 count.
-
-                ArraySegment<byte> sendBuff = SendBufferHelper.Close(count);
-
-                if (success)
-                    Send(sendBuff);
+                ArraySegment<byte> s = packet.Write(); // Serialize한 결과를 byte배열로 받음.
+                if (s != null)
+                    Send(s);
 
             }
         }

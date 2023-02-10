@@ -16,3 +16,4 @@ Server-Program-Session: knight class 추가. ServerCore-Session-Send인풋인자
 [20230209_6] ServerCore: Session-Session(Class)->PacketSession(Class)로 수정. Server: Program-GameSession(Class)가Session상속받던것을->PacketSession을 상속받도록 수정. kight클래스{hp, attack}을 Packet클래스{size, packetId}로 수정.   
 [20230210_1] [Serialization] DummyClient: ServerSession(Class)추가. 기존 Programs(Class)내 패킷통신 부분을 이동함. Server: ClientSession(Class)추가. 기존 Programs(Class)내 패킷통신 부분을 이동함.  
 [20230210_2] [Serialization] DummyClient-ServerSession: BitConverter.GetBytes+Array.Copy대신에 BitConverter.TryWriteBytes사용함. success여부를 리턴값으로 알 수 있고 빠름.
+[20230210_3] [Serialization] Serialization의 packet write, read함수화. 패킷 변조 방지용 ReadOnlySpan<byte>함수.
