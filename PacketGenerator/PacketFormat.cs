@@ -8,80 +8,33 @@ namespace PacketGenerator
 {
     class PacketFormat
     {
+        // {0] 패킷 이름
+        // {1} 멤버 변수들
+        // {2} 멤버 변수 Read
+        // {3} 멤버 변수 Write
+        // 
         public static string packetFormat =
 
 @"
 
-class PlayerInfoReq
-{
+class {0}
+{{
     
-    public long playerId;
-    public string name;
-
-    public struct SkillInfo
-    {
-        public int id;
-        public short level;
-        public float duration;
-
-        public bool Write(Span<byte> s, ref ushort count)//Span: 전체 배열, count: 현재 작업한부분.
-        {
-            bool success = true;
-            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), id);
-            count += sizeof(int);
-            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), level);
-            count += sizeof(short);
-            success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), duration);
-            count += sizeof(float);
-            return success;
-        }
-
-        public void Read(ReadOnlySpan<byte> s, ref ushort count)
-        {
-            id = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-            count += sizeof(int);
-            level = BitConverter.ToInt16(s.Slice(count, s.Length - count));
-            count += sizeof(short);
-            duration = BitConverter.ToSingle(s.Slice(count, s.Length - count));//Tosingle == Float
-            count += sizeof(float);
-
-        }
-    }
-
-    public List<SkillInfo> skills = new List<SkillInfo>();
-        
+    {1}
+   
     public void Read(ArraySegment<byte> segment)
-    {
+    {{
         //역직렬화
         ushort count = 0;
 
         ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
-
         count += sizeof(ushort);
         count += sizeof(ushort);
-        this.playerId = BitConverter.ToInt64(s.Slice(count, s.Length - count)); // count만 변조하는 악의적인 공격을 감지하기 위해서 누적count보다 header리턴하는 count가 작으면 에러가 나도록 수정함.(READONLY SPAN)
-        count += sizeof(long);
-
-        // string
-        ushort nameLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-        count += sizeof(ushort);
-        this.name = Encoding.Unicode.GetString(s.Slice(count, nameLen));
-        count += nameLen;
-
-        // skill list
-        skills.Clear();
-        ushort skillLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-        count += sizeof(ushort);
-        for (int i = 0; i < skillLen; i++)
-        {
-            SkillInfo skill = new SkillInfo();
-            skill.Read(s, ref count);
-            skills.Add(skill);
-        }
-    }
+        {2}
+    }}
 
     public ArraySegment<byte> Write()
-    {
+    {{
         ArraySegment<byte> segment = SendBufferHelper.Open(4096); // 한번에 큰 덩어리. new byte[4096];  
 
         //직렬화
@@ -91,38 +44,49 @@ class PlayerInfoReq
         Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
 
         count += sizeof(ushort);
-        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.PlayerInfoReq);//slice은 그 자체를 변화시키는 함수가 아니라 계산값을 리턴만 해줌.
+        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.{0});//slice은 그 자체를 변화시키는 함수가 아니라 계산값을 리턴만 해줌.
         count += sizeof(ushort);
-        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerId);
-        count += sizeof(long);
-
-        // string
-        ushort nameLen = (ushort)Encoding.Unicode.GetBytes(this.name, 0, this.name.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nameLen);
-        count += sizeof(ushort);
-        count += nameLen;
-
-        // skill list
-        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)skills.Count);
-        count += sizeof(ushort);
-        foreach (SkillInfo skill in skills)
-            success &= skill.Write(s, ref count);
-
+        {3}
         success &= BitConverter.TryWriteBytes(s, count); // 보내려는 최종 사이즈는 누적된 count.
-
         if (success == false)
             return null;
-
         return SendBufferHelper.Close(count);
+    }}
+}}
+";
+        // {0} 변수 형식
+        // {1} 변수 이름
+        public static string memberFormat =
+@"public {0} {1}";
 
-    }
-}
+        // {0} 변수 이름
+        // {1} To~ 변수 형식
+        // {2} 변수 형식
+        public static string readFormat =
+@"this.{0} = BitConverter.{1}(s.Slice(count, s.Length - count));
+count += sizeof({2});";
 
+        // {0} 변수 이름
+        public static string readStringFormat =
+@"ushort {0]Len = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+count += sizeof(ushort);
+this.{0} = Encoding.Unicode.GetString(s.Slice(count, {0}Len));
+count += {0}Len;
+";
+        // {0} 변수 이름
+        // {1} 변수 형식
 
-"
+        public static string writeFormat =
+@"success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.{0});
+count += sizeof({1});";
 
+        // {0} 변수 이름
 
-
-
+        public static string writeStringFormat =
+@"ushort {0}Len = (ushort)Encoding.Unicode.GetBytes(this.{0}, 0, this.{0}.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), {0}Len);
+count += sizeof(ushort);
+count += {0}Len;
+";
     }
 }
