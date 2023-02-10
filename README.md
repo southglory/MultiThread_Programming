@@ -17,5 +17,5 @@ Server-Program-Session: knight class 추가. ServerCore-Session-Send인풋인자
 [20230210_1] [Serialization] DummyClient: ServerSession(Class)추가. 기존 Programs(Class)내 패킷통신 부분을 이동함. Server: ClientSession(Class)추가. 기존 Programs(Class)내 패킷통신 부분을 이동함.  
 [20230210_2] [Serialization] DummyClient-ServerSession: BitConverter.GetBytes+Array.Copy대신에 BitConverter.TryWriteBytes사용함. success여부를 리턴값으로 알 수 있고 빠름.
 [20230210_3] [Serialization] Serialization의 packet write, read함수화. 패킷 변조 방지용 ReadOnlySpan<byte>함수.  
-[20230210_4] [Serialization] string 가변적인 정보를 위한 작업. sizeof(ushort). span.Slice(). Encoding.Unicode.GetByteCount(), GetBytes(), GetString() 
-
+[20230210_4] [Serialization] string 가변적인 정보를 위한 작업. sizeof(ushort). span.Slice(). Encoding.Unicode.GetByteCount(), GetBytes(), GetString()  
+[20230210_5] [Serialization] Instance buffer를 만들어서 거기에 add를 해서 패킷을 보냈음. flatbuffer를 이용하면 데이터를 배열에 바로 넣도록 하지만, 우리의 방법은 중간의 Instance를 만들어서 거기에 넣는 방법임. 코딩과 관리에 편함.  
