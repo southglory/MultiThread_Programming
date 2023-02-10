@@ -13,4 +13,5 @@ ServerCore Program -> Server Program 코드 이전. ServerCore Session클래스�
 [20230209_5] SendBuffer 작성.  Session 외부에서 만듬. 내부에서 만들면 100명 유저가 각각 나머지 99명 유저에게 보내야 하므로 거의 만번을 보내지만, 외부에서 만들면 외부에서 100명 유저에게 총 100번만 보내면 되기 때문. SendBuffer의 크기는 어떻게 정할까? 가변 사이즈의 리스트라도 들어가면 어떻게 할까? 
 아주 큰 덩어리를 만들고, 그걸 조금씩 잘라서 사용하면 효율적일 것. 
 Server-Program-Session: knight class 추가. ServerCore-Session-Send인풋인자를 byte[]가 아니라 ArraySegment<byte>로 수정. _sendQueue도 ArraySegment<byte>로 수정.  
-[20230209_6] ServerCore: Session-Session(Class)->PacketSession(Class)로 수정. Server: Program-GameSession(Class)가Session상속받던것을->PacketSession을 상속받도록 수정. kight클래스{hp, attack}을 Packet클래스{size, packetId}로 수정. 
+[20230209_6] ServerCore: Session-Session(Class)->PacketSession(Class)로 수정. Server: Program-GameSession(Class)가Session상속받던것을->PacketSession을 상속받도록 수정. kight클래스{hp, attack}을 Packet클래스{size, packetId}로 수정.   
+[20230210_1] DummyClient: ServerSession(Class)추가. 기존 Programs(Class)내 패킷통신 부분을 이동함. Server: ClientSession(Class)추가. 기존 Programs(Class)내 패킷통신 부분을 이동함.  
