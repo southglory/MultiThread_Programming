@@ -14,4 +14,5 @@ ServerCore Program -> Server Program 코드 이전. ServerCore Session클래스�
 아주 큰 덩어리를 만들고, 그걸 조금씩 잘라서 사용하면 효율적일 것. 
 Server-Program-Session: knight class 추가. ServerCore-Session-Send인풋인자를 byte[]가 아니라 ArraySegment<byte>로 수정. _sendQueue도 ArraySegment<byte>로 수정.  
 [20230209_6] ServerCore: Session-Session(Class)->PacketSession(Class)로 수정. Server: Program-GameSession(Class)가Session상속받던것을->PacketSession을 상속받도록 수정. kight클래스{hp, attack}을 Packet클래스{size, packetId}로 수정.   
-[20230210_1] DummyClient: ServerSession(Class)추가. 기존 Programs(Class)내 패킷통신 부분을 이동함. Server: ClientSession(Class)추가. 기존 Programs(Class)내 패킷통신 부분을 이동함.  
+[20230210_1] [Serialization] DummyClient: ServerSession(Class)추가. 기존 Programs(Class)내 패킷통신 부분을 이동함. Server: ClientSession(Class)추가. 기존 Programs(Class)내 패킷통신 부분을 이동함.  
+[20230210_2] [Serialization] DummyClient-ServerSession: BitConverter.GetBytes+Array.Copy대신에 BitConverter.TryWriteBytes사용함. success여부를 리턴값으로 알 수 있고 빠름.
