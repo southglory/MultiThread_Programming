@@ -109,6 +109,9 @@ namespace PacketGenerator
                 }
             }
 
+            memberCode = memberCode.Replace("\n", "\n\t");
+            readCode = readCode.Replace("\n", "\n\t\t");
+            writeCode = writeCode.Replace("\n", "\n\t\t");
             return new Tuple<string, string, string>(memberCode, readCode, writeCode);
         }
 
