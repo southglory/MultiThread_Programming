@@ -4,6 +4,36 @@ class PlayerInfoReq
     public long playerId;
 	public string name;
 	
+	public struct Skill
+	{
+	    public int id;
+		public short level;
+		public float duration;
+	
+	    public void Read(ReadOnlySpan<byte> s, ref ushort count)
+	    {
+	        this.id = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+			count += sizeof(int);
+			this.level = BitConverter.ToInt16(s.Slice(count, s.Length - count));
+			count += sizeof(short);
+			this.duration = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+			count += sizeof(float);
+	    }
+	
+	    public bool Write(Span<byte> s, ref ushort count)//Span: 전체 배열, count: 현재 작업한부분.
+	    {
+	        bool success = true;
+	        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.id);
+			count += sizeof(int);
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.level);
+			count += sizeof(short);
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.duration);
+			count += sizeof(float);
+	        return success;
+	    }
+	}
+	public List<Skill> skills = new List<Skill>();
+	
    
     public void Read(ArraySegment<byte> segment)
     {
@@ -19,6 +49,17 @@ class PlayerInfoReq
 		count += sizeof(ushort);
 		this.name = Encoding.Unicode.GetString(s.Slice(count, nameLen));
 		count += nameLen;
+		
+		// skill list
+		this.skills.Clear();
+		ushort skillLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		for (int i = 0; i < skillLen; i++)
+		{
+		    Skill skill = new Skill();
+		    skill.Read(s, ref count);
+		    skills.Add(skill);
+		}
 		
     }
 
@@ -41,6 +82,12 @@ class PlayerInfoReq
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nameLen);
 		count += sizeof(ushort);
 		count += nameLen;
+		
+		// skill list
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)this.skills.Count);
+		count += sizeof(ushort);
+		foreach (Skill skill in this.skills)
+		    success &= skill.Write(s, ref count);
 		
         success &= BitConverter.TryWriteBytes(s, count); // 보내려는 최종 사이즈는 누적된 count.
         if (success == false)
