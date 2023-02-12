@@ -21,4 +21,5 @@ Server-Program-Session: knight class 추가. ServerCore-Session-Send인풋인자
 [20230210_5] [Serialization] Instance buffer를 만들어서 거기에 add를 해서 패킷을 보냈음. flatbuffer를 이용하면 데이터를 배열에 바로 넣도록 하지만, 우리의 방법은 중간의 Instance를 만들어서 거기에 넣는 방법임. 코딩과 관리에 편함.  
 [20230210_6] [Packet Generator] 자동화.   Tools폴더 내에 PacketGenerator 프로젝트를 생성. PDL.xml 새항목 추가.(Packet Definition List라고 하자.). Program에 ParsePacket(XmlReader r), ParseMembers(XmlReader r) 작성. PacketFormat새항목 추가, 작성중.  
 [20230210_7] [Packet Generator] ServerSession Read Write 함수 템플릿화, 변수 이름 자동화 중. at PacketFormat.cs
-[20230210_8] [Packet Generator] PacketGenerator - Program: File.WriteAllText(genPackets)로 파싱한 내용을 추가함. 지금 에러상태임. GenPackets.cs가 자동생성 안됨.
+[20230210_8] [Packet Generator] PacketGenerator - Program: File.WriteAllText(genPackets)로 파싱한 내용을 추가함. 지금 에러상태임. GenPackets.cs의 내용이 자동생성 안됨.  
+[20230212_1] [Packet Generator] GenPacket.cs가 생성 안되는 에러. Error메시지: "Unhandled exception. System.FormatException: Input string was not in a correct format.". Error슈팅: PacketFormat.cs에서 변수를 지정해줄 때 {}중괄호를 {]로 오타. Error슈팅결과: GenPackets.cs의 내용이 자동생성 됨.  

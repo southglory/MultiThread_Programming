@@ -14,10 +14,8 @@ namespace PacketGenerator
         // {3} 멤버 변수 Write
         public static string packetFormat =
 @"
-
 class {0}
 {{
-    
     {1}
    
     public void Read(ArraySegment<byte> segment)
@@ -66,7 +64,7 @@ count += sizeof({2});";
 
         // {0} 변수 이름
         public static string readStringFormat =
-@"ushort {0]Len = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+@"ushort {0}Len = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
 count += sizeof(ushort);
 this.{0} = Encoding.Unicode.GetString(s.Slice(count, {0}Len));
 count += {0}Len;";

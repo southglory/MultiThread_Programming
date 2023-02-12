@@ -87,7 +87,6 @@ namespace PacketGenerator
                 switch (memberType)
                 {
                     case "bool":
-                    case "byte":
                     case "short":
                     case "ushort":
                     case "int":
