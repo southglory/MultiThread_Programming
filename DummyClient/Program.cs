@@ -18,20 +18,22 @@ namespace DummyClient
 
             Connector connector = new Connector();
 
-            connector.Connect(endPoint, () => { return new ServerSession(); }); // 서버세션 만듬.
+            connector.Connect(endPoint, 
+                () => { return SessionManager.Instance.Generate(); },
+                100); // 클라이언트 세션 만듬. 100개.
 
             while (true)
             {
                 try
                 {
-                   
+                    SessionManager.Instance.SendForEach();//모든 ClientSession들이 ServerSession으로 패킷을 날려주도록 하려함.
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.ToString());
                 }
 
-                Thread.Sleep(100);
+                Thread.Sleep(250);
             }
 
             

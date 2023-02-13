@@ -3,17 +3,14 @@ using ServerCore;
 class PacketManager
 {
     #region Singleton
-    static PacketManager _instance;
-    public static PacketManager Instance
-    {
-        get 
-        { 
-            if (_instance == null)
-                _instance = new PacketManager();
-            return _instance;
-        }
-    }
+    static PacketManager _instance = new PacketManager();
+    public static PacketManager Instance { get {return _instance;} }
     #endregion
+
+    PacketManager()
+    {
+        Register();
+    }
 
     // _OnRecv 딕셔너리: 1. 프로토콜ID로 구별. 2.어떤 행동을 할 것인지 받아서 저장.
     Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>> _onRecv = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>>();
@@ -29,9 +26,9 @@ class PacketManager
       // MakePacket제너릭함수에게 어떤 패킷클래스를 생성할지(PlayerInfoReq같은) 알려준 다음, 그래서 MakePacket제너릭함수가 생성한 패킷클래스를 인자로 받고,
         // PacketID도 인자로 받아서
         // _onRecv딕셔너리에다가 저장함.
-        _onRecv.Add((ushort)PacketID.S_Test, MakePacket<S_Test>);
+        _onRecv.Add((ushort)PacketID.S_Chat, MakePacket<S_Chat>);
         // PlayerInfoReq에 짝이 맞는 PlayerInfoReqHandler를 담는 _handler딕셔너리
-        _handler.Add((ushort)PacketID.S_Test, PacketHandler.S_TestHandler);
+        _handler.Add((ushort)PacketID.S_Chat, PacketHandler.S_ChatHandler);
 
 
     }

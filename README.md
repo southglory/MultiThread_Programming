@@ -38,6 +38,8 @@ Server-Packet-PacketHandler.cs추가, Server-Packet-PacketManager.cs추가. Pack
 추후에 OnRecvPacket(session, buffer)함수가 수시로 호출될 때 핸들러가 패킷프로토콜ID에 맞는 값을 참조해서 읽는다.  
 [20230214_1] [Packet Generator] Automate PacketManager.  
 [20230214_2] [Packet Generator] Server-ServerPacketManager: only get packets from Client with "C_". DummyClient-ClientPacketManager: only get packets from Server with "S_".  
-[20230214_3] [Chatting Test] 
+[20230214_3] [Chatting Test]  
+
+
 
 
