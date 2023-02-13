@@ -10,7 +10,8 @@ namespace PacketGenerator
     {
         // {0} 패킷 등록
         public static string managerFormat =
-@"
+@"using ServerCore;
+
 class PacketManager
 {{
     #region Singleton
@@ -50,17 +51,6 @@ class PacketManager
         count += 2;
         ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
         count += 2;
-
-        switch ((PacketID)id)
-        {{
-            case PacketID.PlayerInfoReq:
-                {{
-                    PlayerInfoReq p = new PlayerInfoReq();
-                    p.Read(buffer);
-
-                }}
-                break;
-        }}
 
         // action 생성: PacketSession과 ArraySegment(패킷)를 인자로 받는 delegate타입.
         Action<PacketSession, ArraySegment<byte>> action = null;

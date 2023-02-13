@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 public enum PacketID
 {
-    PlayerInfoReq = 1,
-	Test = 2,
+    C_PlayerInfoReq = 1,
+	S_Test = 2,
 	
 }
 
@@ -21,7 +21,7 @@ interface IPacket
 }
 
 
-class PlayerInfoReq : IPacket
+class C_PlayerInfoReq : IPacket
 {
     public sbyte testByte;
 	public long playerId;
@@ -98,7 +98,7 @@ class PlayerInfoReq : IPacket
 	public List<Skill> skills = new List<Skill>();
 	
    
-    public ushort Protocol { get { return (ushort)PacketID.PlayerInfoReq;  } }
+    public ushort Protocol { get { return (ushort)PacketID.C_PlayerInfoReq;  } }
 
     public void Read(ArraySegment<byte> segment)
     {
@@ -141,7 +141,7 @@ class PlayerInfoReq : IPacket
         Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
 
         count += sizeof(ushort);
-        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.PlayerInfoReq);//slice은 그 자체를 변화시키는 함수가 아니라 계산값을 리턴만 해줌.
+        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_PlayerInfoReq);//slice은 그 자체를 변화시키는 함수가 아니라 계산값을 리턴만 해줌.
         count += sizeof(ushort);
         segment.Array[segment.Offset + count] = (byte)this.testByte;//sbyte일 경우 byte로 강제 casting을 위해서 (byte)추가함.
 		count += sizeof(sbyte);
@@ -165,11 +165,11 @@ class PlayerInfoReq : IPacket
     }
 }
 
-class Test : IPacket
+class S_Test : IPacket
 {
     public int testInt;
    
-    public ushort Protocol { get { return (ushort)PacketID.Test;  } }
+    public ushort Protocol { get { return (ushort)PacketID.S_Test;  } }
 
     public void Read(ArraySegment<byte> segment)
     {
@@ -194,7 +194,7 @@ class Test : IPacket
         Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
 
         count += sizeof(ushort);
-        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.Test);//slice은 그 자체를 변화시키는 함수가 아니라 계산값을 리턴만 해줌.
+        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_Test);//slice은 그 자체를 변화시키는 함수가 아니라 계산값을 리턴만 해줌.
         count += sizeof(ushort);
         success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.testInt);
 		count += sizeof(int);
