@@ -28,4 +28,4 @@ Server-Program-Session: knight class 추가. ServerCore-Session-Send인풋인자
 [20230213_1] [Packet Generator] byte, sbyte타입 추가함.  
 [20230213_2] [Packet Generator] PDL.xml: list안에 list가 들어가는 경우(예를 들어 캐릭터 속성)를 추가. ERROR 발생.
 [20230213_3] [Packet Generator] ERROR 해결. ThrowFormatError()로부터 원인을 추측함. PacketFormat.cs에서 //주석부분에 {}중괄호를 넣었는데 이걸 인식해버려서 에러났음.. 해결법: 주석에서 { 뺐음.  
-
+[20230213_4] [Packet Generator] 이중리스트도 자동으로 코드 생성이 가능함. struct List를 class List로 변경함.   

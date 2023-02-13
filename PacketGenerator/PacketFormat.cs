@@ -88,7 +88,7 @@ class {0}
         // {4} 멤버 변수 Write
         public static string memberListFormat =
 @"
-public struct {0}
+public class {0}
 {{
     {2}
 
