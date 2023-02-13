@@ -29,3 +29,8 @@ Server-Program-Session: knight class 추가. ServerCore-Session-Send인풋인자
 [20230213_2] [Packet Generator] PDL.xml: list안에 list가 들어가는 경우(예를 들어 캐릭터 속성)를 추가. ERROR 발생.
 [20230213_3] [Packet Generator] ERROR 해결. ThrowFormatError()로부터 원인을 추측함. PacketFormat.cs에서 //주석부분에 {}중괄호를 넣었는데 이걸 인식해버려서 에러났음.. 해결법: 주석에서 { 뺐음.  
 [20230213_4] [Packet Generator] 이중리스트도 자동으로 코드 생성이 가능함. struct List를 class List로 변경함.   
+[20230213_5] [Packet Generator] 1. PacketGenerator-Program.cs: PDL.xml의 경로를 string인자로 받도록 수정. 경로는 ../../../PDL.xml.  
+2.Commons-GenPackets.bat: 배치파일을 만들어서 exe를 클릭하는 일을 시킴. START의 인자로 PDL.xml의 경로를 넣어줌.  
+3. 생성된 GenPackets.cs를 DummyClient-Packet-GenPackets.cs, Server-Packet-GenPackets.cs으로 자동 복사 갱신되도록 함. XCOPY에 /Y 옵션으로 덮어쓰기 허락함.  
+
+
