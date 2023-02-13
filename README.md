@@ -36,6 +36,6 @@ Server-Program-Session: knight class 추가. ServerCore-Session-Send인풋인자
 Server-Packet-PacketHandler.cs추가, Server-Packet-PacketManager.cs추가. PacketManager는 싱글톤(static 인스턴스를 하나만 사용할 것을 상정하고 만듬).  
 그리고 Server-Program.cs가 맨 처음 실행될 때(아직 멀티쓰레드가 아닐 때) 단 한번만 PacketManager Instance의 Register()함수를 실행해서 _onRecv딕셔너리(dictionary)에는 패킷클래스들을, _handler딕셔너리(dictionary)에는 그 패킷클래스 타입의 패킷을 invoke하기 위한 핸들러들을 담는다(add).  
 추후에 OnRecvPacket(session, buffer)함수가 수시로 호출될 때 핸들러가 패킷프로토콜ID에 맞는 값을 참조해서 읽는다.  
-
+[20230214_1] [Packet Generator] Automate PacketManager.
 
 
