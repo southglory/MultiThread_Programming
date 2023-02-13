@@ -16,6 +16,9 @@ namespace Server
 
         static void Main(string[] args)
         {
+            // 멀티쓰레드가 개입을 하지 않는 맨 처음 싱글쓰레드 부분에 PacketManager의 Register()함수를 호출.
+            PacketManager.Instance.Register();
+
             // DNS (Domain Name System)
             // www.rookiss.com => 123.123.123.12
             string host = Dns.GetHostName();
