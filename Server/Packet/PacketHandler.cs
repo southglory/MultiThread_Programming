@@ -18,7 +18,12 @@ class PacketHandler
         if (clientSession.Room == null)
             return;
 
-        clientSession.Room.Broadcast(clientSession, chatPacket.chat);
+        //jobqueue에 쌓이는 주문서.
+
+        GameRoom room = clientSession.Room;
+        room.Push(
+            () => room.Broadcast(clientSession, chatPacket.chat)
+        );
     }
 
 }
