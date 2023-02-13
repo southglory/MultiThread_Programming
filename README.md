@@ -25,3 +25,4 @@ Server-Program-Session: knight class 추가. ServerCore-Session-Send인풋인자
 [20230212_1] [Packet Generator] GenPacket.cs가 생성 안되는 에러. Error메시지: "Unhandled exception. System.FormatException: Input string was not in a correct format.". Error슈팅: PacketFormat.cs에서 변수를 지정해줄 때 {}중괄호를 {]로 오타. Error슈팅결과: GenPackets.cs의 내용이 자동생성 됨.  
 [20230212_2] [Packet Generator] Tab정렬.  
 [20230212_3] [Packet Generator] List parsing작성, 패킷제너레이터 사용, 테스트.  
+[20230213_1] [Packet Generator] byte, sbyte타입 추가함.
