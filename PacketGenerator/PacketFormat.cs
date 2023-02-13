@@ -117,7 +117,7 @@ count += sizeof({2});";
         // {0} 변수 이름
         // {1} 변수 형식
         public static string readByteFormat =
-@"this.{0} = ({1})segment.Array[segment.Offset + count];//sbyte일 경우 sbyte로 casting을 위해서 ({})추가함.
+@"this.{0} = ({1})segment.Array[segment.Offset + count];//sbyte일 경우 sbyte로 casting을 위해서 ()추가함.
 count += sizeof({1});";
 
 

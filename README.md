@@ -26,4 +26,6 @@ Server-Program-Session: knight class 추가. ServerCore-Session-Send인풋인자
 [20230212_2] [Packet Generator] Tab정렬.  
 [20230212_3] [Packet Generator] List parsing작성, 패킷제너레이터 사용, 테스트.  
 [20230213_1] [Packet Generator] byte, sbyte타입 추가함.  
-[20230213_2] [Packet Generator] PDL.xml: list안에 list가 들어가는 경우(예를 들어 캐릭터 속성)를 추가. ERROR 발생.  
+[20230213_2] [Packet Generator] PDL.xml: list안에 list가 들어가는 경우(예를 들어 캐릭터 속성)를 추가. ERROR 발생.
+[20230213_3] [Packet Generator] ERROR 해결. ThrowFormatError()로부터 원인을 추측함. PacketFormat.cs에서 //주석부분에 {}중괄호를 넣었는데 이걸 인식해버려서 에러났음.. 해결법: 주석에서 { 뺐음.  
+
