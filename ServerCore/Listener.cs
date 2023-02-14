@@ -14,7 +14,7 @@ namespace ServerCore
         Func<Session> _sessionFactory;//세션을 어떤 방식으로 누구를 만들지 정의하는 함수.
 
 
-        public void Init(IPEndPoint endPoint, Func<Session> sessionFactory)
+        public void Init(IPEndPoint endPoint, Func<Session> sessionFactory, int register = 10, int backlog = 100)
         {
             _listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             _sessionFactory += sessionFactory;
@@ -24,9 +24,9 @@ namespace ServerCore
 
             // 영업 시작
             // backing : 최대 대기수
-            _listenSocket.Listen(10);
+            _listenSocket.Listen(backlog);
 
-            for (int i = 0; i < 10; i++) // 동접자가 많으면 이렇게 늘려도 된다.
+            for (int i = 0; i < register; i++) // 동접자가 많으면 이렇게 늘려도 된다.
             {
                 SocketAsyncEventArgs args = new SocketAsyncEventArgs();
                 args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted);
