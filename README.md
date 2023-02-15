@@ -41,7 +41,7 @@ Server-Packet-PacketHandler.cs추가, Server-Packet-PacketManager.cs추가. Pack
 [20230214_3] [Chatting Test]  
 [20230214_4] [JobQueue]  
 [20230214_5] [JobQueue] 락을 이용해서 일감을 할당하는 경우는 만일 쓰레드가 너무 많이 생성될 경우 병목현상이 생겨서 싱글쓰레드일때보다도 일을 못하게 될 수 있다. 그래서 Queue를 만들고 일감을 Queue에 넣어서 순차적으로 일감을 할당해주는 것이 더 좋고 중요하다.  그러나 심리스seamless 게임(와우, 리니지)의 경우는 map region에 따라 JobQueue를 만들 수는 없고, 몬스터, 오브젝 등에게 JobQueue를 만든다.  [TaskQueue]작성,테스트  
-
+[20230215_1] [TaskQueue] 삭제, [패킷모아보내기][JobTimer]  
 
 
 

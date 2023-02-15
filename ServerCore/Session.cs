@@ -17,6 +17,7 @@ namespace ServerCore
         public sealed override int OnRecv(ArraySegment<byte> buffer) // sealed 키워드는 혹시 다른 클래스가 PacketSession을 상속받아도 OnRecv함수를 override할수 없게끔 봉인.
         {
             int processLen = 0;
+            int packetCount = 0;
 
             while (true)
             {
@@ -31,10 +32,14 @@ namespace ServerCore
 
                 // 여기까지 왔으면 패킷 조립 가능
                 OnRecvPacket(new ArraySegment<byte>(buffer.Array, buffer.Offset, dataSize));//new ArraySegment<byte>()는 buffer.Slice()와 같지만 가독성이 더 좋아서 Slice대신 씀. 그리고, ArraySegment는 클래스가 아니라 구조체(struct)이므로 new로 생성하더라도 heap영역을 잡아먹는게 아니라 stack에 복사되는 것일 뿐이다. 그래서 부담 없이 만들 수 있다.
+                packetCount++;
 
                 processLen += dataSize;
                 buffer = new ArraySegment<byte>(buffer.Array, buffer.Offset + dataSize, buffer.Count - dataSize);
             }
+
+            if (packetCount > 1)
+                Console.WriteLine($"패킷 모아보내기 : {packetCount}");
 
             return processLen;
         }
@@ -48,7 +53,7 @@ namespace ServerCore
         Socket _socket;
         int _disconnected = 0; // 끊겼는지 여부를 관리.
 
-        RecvBuffer _recvBuffer = new RecvBuffer(1024);
+        RecvBuffer _recvBuffer = new RecvBuffer(65535);
 
         object _lock = new object();
         Queue<ArraySegment<byte>> _sendQueue= new Queue<ArraySegment<byte>>();
@@ -77,6 +82,21 @@ namespace ServerCore
             _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
             _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendCompleted);
             RegisterRecv();            
+        }
+
+        public void Send(List<ArraySegment<byte>> sendBuffList)
+        {
+            if (sendBuffList.Count == 0)
+                return;
+
+            lock (_lock)
+            {
+                foreach (ArraySegment<byte> sendBuff in sendBuffList)
+                    _sendQueue.Enqueue(sendBuff);
+
+                if (_pendingList.Count == 0)
+                    RegisterSend();
+            }
         }
 
         public void Send(ArraySegment<byte> sendBuff)
