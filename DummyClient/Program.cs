@@ -20,7 +20,7 @@ namespace DummyClient
 
             connector.Connect(endPoint, 
                 () => { return SessionManager.Instance.Generate(); },
-                500); // 클라이언트 세션 만듬. 100개.
+                10); // 클라이언트 세션 만듬. 10개.
 
             while (true)
             {
