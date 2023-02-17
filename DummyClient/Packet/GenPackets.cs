@@ -13,7 +13,7 @@ public enum PacketID
 	
 }
 
-interface IPacket
+public interface IPacket
 {
 	ushort Protocol { get; }
 	void Read(ArraySegment<byte> segment);
@@ -43,7 +43,7 @@ class C_Chat : IPacket
 
     public ArraySegment<byte> Write()
     {
-        ArraySegment<byte> segment = SendBufferHelper.Open(4096); // 한번에 큰 덩어리. new byte[4096];  
+        ArraySegment<byte> segment = SendBufferHelper.Open(65535); // 한번에 큰 덩어리. new byte[65535];  
 
         //직렬화
         ushort count = 0;
@@ -90,7 +90,7 @@ class S_Chat : IPacket
 
     public ArraySegment<byte> Write()
     {
-        ArraySegment<byte> segment = SendBufferHelper.Open(4096); // 한번에 큰 덩어리. new byte[4096];  
+        ArraySegment<byte> segment = SendBufferHelper.Open(65535); // 한번에 큰 덩어리. new byte[65535];  
 
         //직렬화
         ushort count = 0;

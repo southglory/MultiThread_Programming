@@ -11,7 +11,7 @@ namespace ServerCore
     {
         public static ThreadLocal<SendBuffer> CurrentBuffer = new ThreadLocal<SendBuffer>(() => { return null; });// 컨텐츠끼리의 경합을 막기 위해서 ThreadLocal 타입으로 만들어줌.
 
-        public static int ChunkSize { get; set; } = 65535 * 100; // 큰 덩어리 사이즈.
+        public static int ChunkSize { get; set; } = 65535; // 큰 덩어리 사이즈.
         
         public static ArraySegment<byte> Open(int reserveSize)
         {
