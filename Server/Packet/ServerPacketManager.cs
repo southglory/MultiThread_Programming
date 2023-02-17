@@ -2,7 +2,7 @@ using ServerCore;
 using System;
 using System.Collections.Generic;
 
-class PacketManager
+public class PacketManager
 {
     #region Singleton
     static PacketManager _instance = new PacketManager();
@@ -28,9 +28,16 @@ class PacketManager
       // MakePacket제너릭함수에게 어떤 패킷클래스를 생성할지(PlayerInfoReq같은) 알려준 다음, 그래서 MakePacket제너릭함수가 생성한 패킷클래스를 인자로 받고,
         // PacketID도 인자로 받아서
         // _makeFunc딕셔너리에다가 저장함.
-        _makeFunc.Add((ushort)PacketID.C_Chat, MakePacket<C_Chat>);
+        _makeFunc.Add((ushort)PacketID.C_LeaveGame, MakePacket<C_LeaveGame>);
         // PlayerInfoReq에 짝이 맞는 PlayerInfoReqHandler를 담는 _handler딕셔너리
-        _handler.Add((ushort)PacketID.C_Chat, PacketHandler.C_ChatHandler);
+        _handler.Add((ushort)PacketID.C_LeaveGame, PacketHandler.C_LeaveGameHandler);
+
+      // MakePacket제너릭함수에게 어떤 패킷클래스를 생성할지(PlayerInfoReq같은) 알려준 다음, 그래서 MakePacket제너릭함수가 생성한 패킷클래스를 인자로 받고,
+        // PacketID도 인자로 받아서
+        // _makeFunc딕셔너리에다가 저장함.
+        _makeFunc.Add((ushort)PacketID.C_Move, MakePacket<C_Move>);
+        // PlayerInfoReq에 짝이 맞는 PlayerInfoReqHandler를 담는 _handler딕셔너리
+        _handler.Add((ushort)PacketID.C_Move, PacketHandler.C_MoveHandler);
 
 
     }

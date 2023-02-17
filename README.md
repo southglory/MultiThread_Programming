@@ -44,7 +44,7 @@ Server-Packet-PacketHandler.cs추가, Server-Packet-PacketManager.cs추가. Pack
 [20230215_1] [TaskQueue] 삭제, [패킷모아보내기][JobTimer]  
 [20230215_2] Unity 연동  
 [20230217_1] Unity 연동2_ 유니티는 메인쓰레드만 사용할수 있으므로, 기존 패킷 코드를 백그라운드가 아닌 메인쓰레드에서 실행되도록 바꿈.  
-
+[20230217_2] Unity 연동3_랜덤XYZ좌표 보내기.  
 
 
 
