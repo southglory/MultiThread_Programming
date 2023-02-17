@@ -48,15 +48,15 @@ namespace Server
                 {
                     isSelf = (s == session),
                     playerId = s.SessionId,
-                    posX= s.PosX,
-                    posY= s.PosY,
+                    posX = s.PosX,
+                    posY = s.PosY,
                     posZ = s.PosZ,
                 });
             }
             session.Send(players.Write());
 
             // 신입생 입장을 모두에게 말한다.
-            S_BroadcastEngerGame enter = new S_BroadcastEngerGame();
+            S_BroadcastEnterGame enter = new S_BroadcastEnterGame();
             enter.playerId= session.SessionId;
             enter.posX = 0;
             enter.posY = 0;

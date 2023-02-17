@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 public enum PacketID
 {
-    S_BroadcastEngerGame = 1,
+    S_BroadcastEnterGame = 1,
 	C_LeaveGame = 2,
 	S_BroadcastLeaveGame = 3,
 	S_PlayerList = 4,
@@ -25,14 +25,14 @@ public interface IPacket
 }
 
 
-public class S_BroadcastEngerGame : IPacket
+public class S_BroadcastEnterGame : IPacket
 {
     public int playerId;
 	public float posX;
 	public float posY;
 	public float posZ;
    
-    public ushort Protocol { get { return (ushort)PacketID.S_BroadcastEngerGame;  } }
+    public ushort Protocol { get { return (ushort)PacketID.S_BroadcastEnterGame;  } }
 
     public void Read(ArraySegment<byte> segment)
     {
@@ -63,7 +63,7 @@ public class S_BroadcastEngerGame : IPacket
         Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
 
         count += sizeof(ushort);
-        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_BroadcastEngerGame);//slice은 그 자체를 변화시키는 함수가 아니라 계산값을 리턴만 해줌.
+        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_BroadcastEnterGame);//slice은 그 자체를 변화시키는 함수가 아니라 계산값을 리턴만 해줌.
         count += sizeof(ushort);
         success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerId);
 		count += sizeof(int);

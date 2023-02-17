@@ -31,7 +31,8 @@ class PacketHandler
         if (clientSession.Room == null)
             return;
 
-        Console.WriteLine($"{movePacket.posX}, {movePacket.posY}, {movePacket.posZ}");
+        //Console.WriteLine($"{movePacket.posX}, {movePacket.posY}, {movePacket.posZ}");
+        
         //jobqueue에 쌓이는 주문서.
 
         GameRoom room = clientSession.Room;

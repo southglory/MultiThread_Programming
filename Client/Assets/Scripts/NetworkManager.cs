@@ -11,7 +11,10 @@ public class NetworkManager : MonoBehaviour
 {
     ServerSession _session = new ServerSession();
 
-    // Start is called before the first frame update
+    public void Send(ArraySegment<byte> sendBuff)
+    {
+        _session.Send(sendBuff);
+    }
     void Start()
     {
         // DNS (Domain Name System)
@@ -25,31 +28,14 @@ public class NetworkManager : MonoBehaviour
         connector.Connect(endPoint,
             () => { return _session; },
             1); // 클라이언트 세션 만듬. 1개.   
-
-        StartCoroutine("CoSendPacket");
     }
 
-    // Update is called once per frame
     void Update()
     {
-        IPacket packet = PacketQueue.Instance.Pop();
-        if (packet != null)
-        {
+        // 해당 프레임에 들어온 모든 패킷들을 전부 실행함.
+        List<IPacket> list = PacketQueue.Instance.PopAll();
+        foreach (IPacket packet in list)
             PacketManager.Instance.HandlePacket(_session, packet);
-        }
-    }
 
-    IEnumerable CoSendPacket()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(3.0f);
-
-            C_Chat chatPacket = new C_Chat();
-            chatPacket.chat = "Hello Unity !";
-            ArraySegment<byte> segment = chatPacket.Write();
-
-            _session.Send(segment);
-        }
     }
 }
